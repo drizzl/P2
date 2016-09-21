@@ -42,19 +42,17 @@
     <h1>XKCD Password Generator</h1>
 
     <form method='POST' action='index.php'>
-<!--        Number of words in password <input name="slider_num" type='range' value="5" min="1" max="9" onchange="updateTextInput(this.num_words);">
-		<input class="invisible" name="num_words" type='text' id='num_words' value='5'><br>
--->
-		Number of words in password <input type='number' name='num_words'><br>
-        Number of words in database <input type='number' name='database_size'> /5000<br>
-        Use numbers <input type='checkbox' name='numbers'><br>
-        Use symbols <input type='checkbox' name='symbols'><br>
+	
+		<?php if (isset($nw_error)||isset($db_error)): ?>
+		<p style="color:red">Fields in red are invalid</p>
+		<?php endif; ?>
+
+		<p style="color:<?php echo ($nw_error ? "red":"black") ?>">Number of words in password <input type='number' name='num_words' value="<?php echo $num_words?>"> (1-9)</p>
+		<p style="color:<?php echo ($db_error ? "red":"black") ?>">Number of words in database <input type='number' name='database_size' value="<?php echo $database_size?>">/5000 most commonly used words</p>
+        Use numbers <input type='checkbox' name='numbers' <?php if (isset($numbers)) echo "checked"?>><br>
+        Use symbols <input type='checkbox' name='symbols' <?php if (isset($symbols)) echo "checked"?>><br>
 
         <input type='submit' value='Generate!'>
-
-        <?php if(isset($error)): ?>
-            <div class='error'><?php echo $error; ?></div>
-        <?php endif ?>
 
     </form>
 

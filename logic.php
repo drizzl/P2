@@ -2,13 +2,15 @@
 # the array of words
 $dictionary = [];
 
-#Initialize symobl and number arrays with static data
-$symbols = array('`', '~', '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '-', 
+#Initialize symbol array with static data
+$symbol_arr = array('`', '~', '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '-', 
 				 '_', '+', '=', '\\', '|', ']', '}', '{', '[', '"', "'", ';', ':', 
 				 ',', '<', '>', '.', '/', '?');
 
-
+#This code section checks to see if the dictionary has been loaded from
+# the text file yet. If not, load it from the file and store on _POST variable.
 if (!isset($_POST["dictionary"])) {
+
 	$file_handle = fopen("resources\dictionary.csv", "r");
 	$word_count = 0;
 	while(!feof($file_handle)) {
@@ -20,55 +22,56 @@ if (!isset($_POST["dictionary"])) {
 	$_POST["dictionary"] = $dictionary;
 }
 
-
-
+/*First we check to see if the num_words field has been filled out.
+ That is how we know that the form has been submitted.*/
 if (isset($_POST["num_words"])) {
-	$password_arr = [];
-	for ($i = 0; $i<$_POST["database_size"]; $i++) {
-		$password_arr[$i] = $dictionary[$i];
-	}
+	
+	#set the variables, so that they default after post
+	$num_words = $_POST["num_words"];
+	$database_size = $_POST["database_size"];
+	if (isset($_POST["numbers"])) $numbers = 1;
+	if (isset($_POST["symbols"])) $symbols = 1;
 
-	shuffle($password_arr);
+	#Now we check to see if the number of words is between 0 and 10, otherwise *error*
+	if ($num_words <= 0 || $num_words > 9) {
+		$nw_error = 1;
 
-	$password = '';
-	$word_count=0;
-	foreach($password_arr as $value) {
-		$password .= ucfirst($value);
-		$word_count++;
-		if ($word_count==$_POST["num_words"]) break;
+		/*Now we check to see if the database size is valid.
+		  This line of code exists here and a few lines down because I want to check
+		  all error cases every time, instead of the user running into additional
+		  errors after multiple submissions.*/
+		if ($database_size <= 0 || $database_size > 5000) {
+			$db_error = 1;
+		}
+	} else {
+		#Now we check to see if the database size is valid.
+		if ($database_size <= 0 || $database_size > 5000) {
+			$db_error = 1;
+		} else {
+			#Now we take only the requested number of words out of the "database"
+			$password_arr = [];
+			for ($i = 0; $i<$database_size; $i++) {
+				$password_arr[$i] = $dictionary[$i];
+			}
+
+			#$password_arr now contains the requested word pool. We shuffle them to randomize.
+			shuffle($password_arr);
+
+			$password = '';
+			$word_count=0;
+			#Now we only keep the first X words to create the password.
+			foreach($password_arr as $value) {
+				
+				#ucfirst will capitalize the first letter, to make it more readable
+				$password .= ucfirst($value);
+
+				$word_count++;
+				if ($word_count==$num_words) break; #if we have the whole password, exit.
+			}
+
+			#add random numbers and symbols if requested
+			if (isset($numbers)) $password .= rand(0, 99);
+			if (isset($symbols)) $password .= $symbol_arr[rand(0, 31)];
+		}
 	}
-	if (isset($_POST["numbers"])) $password .= rand(0, 100);
-	if (isset($_POST["symbols"])) $password .= $symbols[rand(0, 31)];
 }
-
-
-# Use a foreach loop to loop through the contestants array
-
-/*
-foreach($_POST as $key => $value) {
-	# Some simple form validation
-	if(trim($value == '')) {
-		$error = 'Please fill out all contestant names.';
-		return;
-	}
-	else if(!ctype_alpha($value)) {
-		$error = 'Contestant names may only contain letters; no numbers or symbols.';
-		return;
-	}
-#	Create a variable $coinFlip; set this variable to be either 0 or 1 (i.e. heads or tails)
-#	Use PHP's rand() function to randomly pick the 0/1
-	$coinFlip = rand(0,1);
-	# If the $coinFlip was 1...
-	if($coinFlip == 1) {
-		# This contestant (i.e. $contestant[$value]) is set to be a "Winner"
-		$contestants[$value] = 'Winner';
-		# Increment the winner count
-		$winnerCount++;
-	}
-	# Otherwise...
-	else {
-		# This contestant (i.e $contestant[$value]) is set to be a "Loser"
-		$contestants[$value] = 'Loser';
-	}
-} # End of loop
-*/
