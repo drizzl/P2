@@ -7,43 +7,35 @@ $symbols = array('`', '~', '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '-'
 				 '_', '+', '=', '\\', '|', ']', '}', '{', '[', '"', "'", ';', ':', 
 				 ',', '<', '>', '.', '/', '?');
 
-/*
+
 if (!isset($_POST["dictionary"])) {
 	$file_handle = fopen("resources\dictionary.csv", "r");
 	$word_count = 0;
 	while(!feof($file_handle)) {
 		$line = fgetcsv($file_handle);
-		$dictionary[$word_count] = $line[2];
+		$dictionary[$word_count] = $line[1];
+		$word_count++;
 	}
 	
 	$_POST["dictionary"] = $dictionary;
 }
-*/
 
-#Test data:
-$dictionary[0] = 'One';
-$dictionary[1] = 'Two';
-$dictionary[2] = 'Three';
-$dictionary[3] = 'Four';
-$dictionary[4] = 'Five';
-$dictionary[5] = 'Six';
-$dictionary[6] = 'Seven';
-$dictionary[7] = 'Eight';
-$dictionary[8] = 'Nine';
-$dictionary[9] = 'Ten';
 
 
 if (isset($_POST["num_words"])) {
 	$password_arr = [];
-	for ($i = 0; $i<$_POST["num_words"]; $i++) {
+	for ($i = 0; $i<$_POST["database_size"]; $i++) {
 		$password_arr[$i] = $dictionary[$i];
 	}
 
 	shuffle($password_arr);
 
 	$password = '';
+	$word_count=0;
 	foreach($password_arr as $value) {
-		$password .= $value;
+		$password .= ucfirst($value);
+		$word_count++;
+		if ($word_count==$_POST["num_words"]) break;
 	}
 	if (isset($_POST["numbers"])) $password .= rand(0, 100);
 	if (isset($_POST["symbols"])) $password .= $symbols[rand(0, 31)];
