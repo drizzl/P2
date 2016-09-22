@@ -6,16 +6,14 @@
     <?php require 'logic.php'; ?>
 
     <style>
+        section {
+            margin:25px 0px;
+			font-weight: bold;
+        }
 		.block {
 			display: block;
 		}
     </style>
-	
-	<script>
-	function updateTextInput(val) {
-		document.getElementById('num_words').value=val;
-	}
-	</script>
 
 </head>
 <body>
@@ -52,7 +50,7 @@
 
 	<?php if(isset($password)): ?>
     <section>
-        Password: <?php echo $password?>
+        Password:<?php echo htmlentities($password)?>
     </section>
 	<?php endif ?>
 

@@ -3,9 +3,9 @@
 $dictionary = [];
 
 #Initialize symbol array with static data
-$symbol_arr = array('`', '~', '!', '@', '#', '$', '%', '^', '&amp', '*', '(', ')', '-', 
-				 '_', '+', '=', '\\', '|', ']', '}', '{', '[', '&quot', "&apos", ';', ':', 
-				 ',', '&lt', '&gt', '.', '/', '?');
+$symbol_arr = array('`', '~', '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '-', 
+				 '_', '+', '=', '\\', '|', ']', '}', '{', '[', '"', "'", ';', ':', 
+				 ',', '<', '&','>', '.', '/', '?');
 
 #This code section checks to see if the dictionary has been loaded from
 # the text file yet. If not, load it from the file and store on _POST variable.
