@@ -11,7 +11,7 @@ $symbol_arr = array('`', '~', '!', '@', '#', '$', '%', '^', '&amp', '*', '(', ')
 # the text file yet. If not, load it from the file and store on _POST variable.
 if (!isset($_POST["dictionary"])) {
 
-	$file_handle = fopen("resources\dictionary.csv", "r");
+	$file_handle = fopen("resources" . DIRECTORY_SEPARATOR . "dictionary.csv", "r");
 	$word_count = 0;
 	while(!feof($file_handle)) {
 		$line = fgetcsv($file_handle);
